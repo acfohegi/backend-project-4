@@ -1,0 +1,16 @@
+name: test
+on: push
+env:
+  CC_TEST_REPORTER_ID: ${{ secrets.CODECLIMATE_COVERAGE }}
+  CC_TEST_REPORTER_LINK: 'https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64'
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '19.8.1'
+      - run: make install
+      - run: make test
+      - run: make test-coverage

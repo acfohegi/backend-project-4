@@ -13,7 +13,7 @@ program
   .version('1.0.0');
 
 program
-  .option('-o, --output [dir]', `output dir (default: "${process.cwd()}")`, process.cwd())
+  .option('-o, --output [dir]', 'output dir', process.cwd())
   .argument('<url>')
   .action((url, options) => {
     const filepath = getFilepath(url, options);

@@ -3,7 +3,7 @@
 import { Command } from 'commander';
 import { writeFile } from 'node:fs';
 import getPage from '../src/getPage.js';
-import getFilepath from '../src/getFilepath.js';
+import PathsNamer from '../src/PathNamer.js';
 
 const program = new Command();
 
@@ -16,7 +16,8 @@ program
   .option('-o, --output [dir]', 'output dir', process.cwd())
   .argument('<url>')
   .action((url, options) => {
-    const filepath = getFilepath(url, options);
+    const pathsNamer = new PathsNamer(url, options);
+    const filepath = pathsNamer.getHtmlFilePath();
     getPage(url)
       .then((html) => writeFile(filepath, html, (err) => {
         if (err) {

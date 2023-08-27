@@ -16,10 +16,10 @@ const getFixturePath = (fixtureName) => path.join(__dirname, 'fixtures', fixture
 
 afterEach(() => {
   mockFs.restore();
-})
+});
 
 test('SourceGetter', async () => {
-  const html = 'html content'
+  const html = 'html content';
   const imgPaths = {
     originalPath: 'https://ru.hexlet.io/assets/professions/nodejs.png',
     filepath: `${os.tmpdir()}/ru-hexlet-io-assets-professions-nodejs.png`,
@@ -64,14 +64,14 @@ test('SourcesProcessor', async () => {
     filepath: 'ru-hexlet-io-courses_files/ru-hexlet-io-assets-professions-nodejs.png',
   }];
 
-  const normalizeHtml = (html) => html
+  const normalizeHtml = (rawHtml) => rawHtml
     .split('\n')
     .map((line) => line.trim())
     .join('');
 
   const pn = new PathsNamer('https://ru.hexlet.io/courses', { output: os.tmpdir() });
   const sp = new SourcesProcessor(html, pn);
-  const processed = sp.process()
+  const processed = sp.process();
 
   expect(normalizeHtml(processed.html)).toBe(normalizeHtml(processedHtml));
   expect(processed.imgs).toEqual(imgs);
@@ -87,7 +87,7 @@ test('FileSaver', async () => {
     'content-disposition': 'attachment; filename=nodejs.png',
   });
 
-  mockFs();
+  // mockFs();
 
   const url = 'https://ru.hexlet.io/courses';
 
@@ -105,8 +105,8 @@ test('FileSaver', async () => {
 
   const actualHtmlPath = await fs.save();
   const actualHtml = await readFile(actualHtmlPath);
-  const actualImage = await readFile(imgs[0].filepath)
-  
+  const actualImage = await readFile(imgs[0].filepath);
+
   await expect(actualHtml).toStrictEqual(html);
   await expect(actualImage).toStrictEqual(image);
 });

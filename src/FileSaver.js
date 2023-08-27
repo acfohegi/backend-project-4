@@ -1,7 +1,7 @@
 import { mkdir, writeFile } from 'node:fs/promises';
 import SourceGetter from './SourceGetter.js';
 
-class FileSaver{
+class FileSaver {
   constructor(sources, pathsNamer) {
     this.sources = sources;
     this.htmlPath = pathsNamer.getHtmlFilePath();
@@ -9,11 +9,11 @@ class FileSaver{
   }
 
   saveHtml() {
-    return writeFile(this.htmlPath, this.sources.html)
+    return writeFile(this.htmlPath, this.sources.html);
   }
 
   saveImgs() {
-    const imgs = this.sources.imgs;
+    const { imgs } = this.sources;
     if (imgs.length === 0) {
       return Promise.resolve();
     }
@@ -21,7 +21,8 @@ class FileSaver{
     mkdir(this.sourcesDir);
 
     const imgPromises = imgs.map(({ originalPath, filepath }) => {
-      return SourceGetter.getImg(originalPath, filepath);
+      const promise = SourceGetter.getImg(originalPath, filepath);
+      return promise;
     });
 
     return Promise.all(imgPromises);

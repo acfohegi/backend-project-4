@@ -12,8 +12,7 @@ class SourcesProcessor {
   findAndUpdate() {
     const pn = this.pathsNamer;
     const dir = this.sourcesDirName;
-    const imgs = this.imgs;
-    const $ = this.$;
+    const { imgs, $ } = this;
 
     $('img').each(function (i, img) {
       const originalPath = pn.getSourceUrl(img.attribs.src);
@@ -21,7 +20,7 @@ class SourcesProcessor {
       const filepath = path.join(dir, filename);
       imgs[i] = ({ originalPath, filepath });
       $(this).attr('src', filepath);
-    })
+    });
   }
 
   process() {

@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { createWriteStream } from 'node:fs';
 
-export default class SourceGetter{
+export default class SourceGetter {
   static getHtml(url) {
     return axios.get(url).then((response) => response.data);
   }

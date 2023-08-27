@@ -1,9 +1,7 @@
 #!/usr/bin/env node
 
 import { Command } from 'commander';
-import { writeFile } from 'node:fs';
-import getPage from '../src/getPage.js';
-import PathsNamer from '../src/PathNamer.js';
+import PageLoader from '../src/PageLoader.js';
 
 const program = new Command();
 
@@ -16,15 +14,8 @@ program
   .option('-o, --output [dir]', 'output dir', process.cwd())
   .argument('<url>')
   .action((url, options) => {
-    const pathsNamer = new PathsNamer(url, options);
-    const filepath = pathsNamer.getHtmlFilePath();
-    getPage(url)
-      .then((html) => writeFile(filepath, html, (err) => {
-        if (err) {
-          throw new Error(err);
-        }
-        console.log(filepath);
-      }));
+    pageLoader = new PageLoader(url, options);
+    pageLoader.load().then((path) => console.log(path));    
   });
 
 program.parse();

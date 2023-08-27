@@ -20,7 +20,7 @@ export default class PathsNamer {
     return `${path.join(dirPath, normalizedUrl)}.html`;
   }
 
-  getSourcesDirPath() {
+  getSourcesDirName() {
     const normalizedUrl = this.getNormalizedUrl();
     return `${normalizedUrl}_files`;
   }
@@ -31,6 +31,10 @@ export default class PathsNamer {
     const rawBasename = path.join(hostname, dir, name);
     const basename = PathsNamer.normalizeString(rawBasename);
     return `${basename}${ext}`;
+  }
+
+  getSourceUrl(filepath) {
+    return [this.url.origin, filepath].join('');
   }
 
   static normalizeString(str) {

@@ -36,10 +36,9 @@ test('SourceGetter', async () => {
   const actualHtml = await SourceGetter.getHtml('https://duckduckgo.com/about');
   await expect(actualHtml).toBe(html);
 
-  const imageStream = await SourceGetter.getImg(imgPaths.originalPath, imgPaths.filepath);
-  const actualImagePath = imageStream.path;
+  await SourceGetter.getImg(imgPaths.originalPath, imgPaths.filepath);
   const imageFixture = await readFile(getFixturePath('nodejs.png'));
-  const actualImage = await readFile(actualImagePath);
+  const actualImage = await readFile(imgPaths.filepath);
   await expect(actualImage).toStrictEqual(imageFixture);
 });
 
@@ -107,6 +106,6 @@ test('FileSaver', async () => {
   const actualHtml = await readFile(actualHtmlPath);
   const actualImage = await readFile(imgs[0].filepath);
 
-  await expect(actualHtml).toStrictEqual(html);
-  await expect(actualImage).toStrictEqual(image);
+  expect(actualHtml).toStrictEqual(html);
+  expect(actualImage).toStrictEqual(image);
 });

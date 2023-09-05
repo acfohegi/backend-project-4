@@ -7,10 +7,26 @@ export default class SourceGetter {
   }
 
   static getImg(url, filepath) {
-    return axios({
-      url,
-      method: 'get',
-      responseType: 'stream',
-    }).then((response) => response.data.pipe(createWriteStream(filepath)));
+    return new Promise((resolve, reject) => {
+      axios({
+        url,
+        method: 'get',
+        responseType: 'stream',
+      }).then((response) => {
+        const stream = createWriteStream(filepath);
+  
+        stream.on('close', () => {
+          resolve();
+        });
+  
+        stream.on('error', (error) => {
+          reject(error);
+        });
+  
+        response.data.pipe(stream);
+      }).catch((error) => {
+        reject(error);
+      });
+    });
   }
 }

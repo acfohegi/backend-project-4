@@ -7,7 +7,7 @@
   "description": "[![Actions Status](https://github.com/acfohegi/backend-project-4/workflows/hexlet-check/badge.svg)](https://github.com/acfohegi/backend-project-4/actions)",
   "main": "index.js",
   "scripts": {
-    "test": "NODE_OPTIONS=--experimental-vm-modules npx jest"
+    "test": "NODE_OPTIONS=--experimental-vm-modules npx jest --coverage"
   },
   "author": "",
   "license": "ISC",

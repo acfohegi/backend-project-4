@@ -14,15 +14,15 @@ export default class SourceGetter {
         responseType: 'stream',
       }).then((response) => {
         const stream = createWriteStream(filepath);
-  
+
         stream.on('close', () => {
           resolve();
         });
-  
+
         stream.on('error', (error) => {
           reject(error);
         });
-  
+
         response.data.pipe(stream);
       }).catch((error) => {
         reject(error);

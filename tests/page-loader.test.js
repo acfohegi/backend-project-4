@@ -86,7 +86,7 @@ test('FileSaver', async () => {
     'content-disposition': 'attachment; filename=nodejs.png',
   });
 
-  // mockFs();
+  mockFs();
 
   const url = 'https://ru.hexlet.io/courses';
 

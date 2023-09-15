@@ -6,7 +6,7 @@ export default class SourceGetter {
     return axios.get(url).then((response) => response.data);
   }
 
-  static getImg(url, filepath) {
+  static getSource(url, filepath) {
     return new Promise((resolve, reject) => {
       axios({
         url,

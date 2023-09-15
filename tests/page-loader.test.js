@@ -19,27 +19,55 @@ afterEach(() => {
 });
 
 test('SourceGetter', async () => {
-  const html = 'html content';
-  const imgPaths = {
-    originalPath: 'https://ru.hexlet.io/assets/professions/nodejs.png',
-    filepath: `${os.tmpdir()}/ru-hexlet-io-assets-professions-nodejs.png`,
+  const sources = {
+    html: 'html content',
+    imgs: [{
+      originalPath: 'https://ru.hexlet.io/assets/professions/nodejs.png',
+      filepath: `${os.tmpdir()}/ru-hexlet-io-assets-professions-nodejs.png`,
+    }],
+    links: [{
+      originalPath: 'https://ru.hexlet.io/assets/application.css',
+      filepath: `${os.tmpdir()}/ru-hexlet-io-assets-application.css`,
+    }],
+    scripts: [{
+      originalPath: 'https://ru.hexlet.io/packs/js/runtime.js',
+      filepath: `${os.tmpdir()}/ru-hexlet-io-packs-js-runtime.js`,
+    }],
   };
 
   nock('https://duckduckgo.com')
     .get('/about')
-    .reply(200, html);
+    .reply(200, sources.html.toString());
 
   nock('https://ru.hexlet.io')
     .get('/assets/professions/nodejs.png')
     .reply(200, createReadStream(getFixturePath('nodejs.png')));
 
-  const actualHtml = await SourceGetter.getHtml('https://duckduckgo.com/about');
-  await expect(actualHtml).toBe(html);
+  nock('https://ru.hexlet.io')
+    .get('/assets/application.css')
+    .reply(200, createReadStream(getFixturePath('application.css')));
 
-  await SourceGetter.getImg(imgPaths.originalPath, imgPaths.filepath);
+  nock('https://ru.hexlet.io')
+    .get('/packs/js/runtime.js')
+    .reply(200, createReadStream(getFixturePath('runtime.js')));
+
+  const actualHtml = await SourceGetter.getHtml('https://duckduckgo.com/about');
+  await expect(actualHtml).toBe(sources.html);
+
+  await SourceGetter.getSource(sources.imgs[0].originalPath, sources.imgs[0].filepath);
   const imageFixture = await readFile(getFixturePath('nodejs.png'));
-  const actualImage = await readFile(imgPaths.filepath);
-  await expect(actualImage).toStrictEqual(imageFixture);
+  const actualImage = await readFile(sources.imgs[0].filepath);
+  expect(actualImage).toStrictEqual(imageFixture);
+
+  await SourceGetter.getSource(sources.links[0].originalPath, sources.links[0].filepath);
+  const cssFixture = await readFile(getFixturePath('application.css'));
+  const actualCss = await readFile(sources.links[0].filepath);
+  expect(actualCss).toStrictEqual(cssFixture);
+
+  await SourceGetter.getSource(sources.scripts[0].originalPath, sources.scripts[0].filepath);
+  const scriptFixture = await readFile(getFixturePath('runtime.js'));
+  const actualScript = await readFile(sources.scripts[0].filepath);
+  expect(actualScript).toStrictEqual(scriptFixture);
 });
 
 test('PathsNamer', () => {
@@ -78,34 +106,62 @@ test('SourcesProcessor', async () => {
 
 const html = await readFile(getFixturePath('ru-hexlet-io-courses.html'));
 const image = await readFile(getFixturePath('nodejs.png'));
+const css = await readFile(getFixturePath('application.css'));
+const script = await readFile(getFixturePath('runtime.js'));
 
 test('FileSaver', async () => {
-  nock('https://ru.hexlet.io').get('/assets/professions/nodejs.png').reply(200, image, {
-    'content-type': 'application/octet-stream',
-    'content-length': image.length,
-    'content-disposition': 'attachment; filename=nodejs.png',
-  });
+  const mockSources = (pathname, filename, src) => {
+    nock('https://ru.hexlet.io').get(pathname).reply(200, src, {
+      'content-type': 'application/octet-stream',
+      'content-length': src.length,
+      'content-disposition': `attachment; filename=${filename}`,
+    });
+  };
+
+  mockSources('/assets/professions/nodejs.png', 'nodejs.png', image);
+  mockSources('/assets/application.css', 'nodejs.png', css);
+  mockSources('/packs/js/runtime.js', 'nodejs.png', script);
 
   mockFs();
 
   const url = 'https://ru.hexlet.io/courses';
 
   const pn = new PathsNamer(url, { output: process.cwd() });
-  const imgSrc = '/assets/professions/nodejs.png';
-  const imgDir = pn.getSourcesDirName();
-  const imgFilename = pn.getSourceFileName(imgSrc);
+  const srcDir = pn.getSourcesDirName();
 
-  const imgs = [{
-    originalPath: pn.getSourceUrl(imgSrc),
-    filepath: path.join(imgDir, imgFilename),
-  }];
-  const sources = { html, imgs };
+  const imgSrc = '/assets/professions/nodejs.png';
+  const imgFilename = pn.getSourceFileName(imgSrc);
+  const linkSrc = '/assets/application.css';
+  const linkFilename = pn.getSourceFileName(linkSrc);
+  const scriptSrc = '/packs/js/runtime.js';
+  const scriptFilename = pn.getSourceFileName(scriptSrc);
+
+  const sources = {
+    html,
+    imgs: [{
+      originalPath: pn.getSourceUrl(imgSrc),
+      filepath: path.join(srcDir, imgFilename),
+    }],
+    links: [{
+      originalPath: pn.getSourceUrl(linkSrc),
+      filepath: path.join(srcDir, linkFilename),
+    }],
+    scripts: [{
+      originalPath: 'https://ru.hexlet.io/packs/js/runtime.js',
+      filepath: path.join(srcDir, scriptFilename),
+    }],
+  };
+
   const fs = new FileSaver(sources, pn);
 
   const actualHtmlPath = await fs.save();
   const actualHtml = await readFile(actualHtmlPath);
-  const actualImage = await readFile(imgs[0].filepath);
+  const actualImage = await readFile(sources.imgs[0].filepath);
+  const actualCss = await readFile(sources.links[0].filepath);
+  const actualScript = await readFile(sources.scripts[0].filepath);
 
   expect(actualHtml).toStrictEqual(html);
   expect(actualImage).toStrictEqual(image);
+  expect(actualCss).toStrictEqual(css);
+  expect(actualScript).toStrictEqual(script);
 });

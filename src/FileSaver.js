@@ -12,24 +12,29 @@ class FileSaver {
     return writeFile(this.htmlPath, this.sources.html);
   }
 
-  saveImgs() {
-    const { imgs } = this.sources;
-    if (imgs.length === 0) {
+  saveSources() {
+    const srcs = [
+      ...this.sources.imgs,
+      ...this.sources.links,
+      ...this.sources.scripts,
+    ];
+
+    if (srcs.length === 0) {
       return Promise.resolve();
     }
 
     mkdir(this.sourcesDir);
 
-    const imgPromises = imgs.map(({ originalPath, filepath }) => {
-      const promise = SourceGetter.getImg(originalPath, filepath);
+    const srcPromises = srcs.map(({ originalPath, filepath }) => {
+      const promise = SourceGetter.getSource(originalPath, filepath);
       return promise;
     });
 
-    return Promise.all(imgPromises);
+    return Promise.all(srcPromises);
   }
 
   save() {
-    return this.saveImgs()
+    return this.saveSources()
       .then(() => this.saveHtml())
       .then(() => this.htmlPath);
   }

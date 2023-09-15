@@ -26,15 +26,15 @@ export default class PathsNamer {
   }
 
   getSourceFileName(filepath) {
-    const { hostname } = this.url;
-    const { dir, name, ext } = path.parse(filepath);
-    const rawBasename = path.join(hostname, dir, name);
+    const url = new URL(filepath, this.url.origin);
+    const { dir, name, ext } = path.parse(url.pathname);
+    const rawBasename = path.join(url.host, dir, name);
     const basename = PathsNamer.normalizeString(rawBasename);
     return `${basename}${ext}`;
   }
 
   getSourceUrl(filepath) {
-    return [this.url.origin, filepath].join('');
+    return new URL(filepath, this.url.origin);
   }
 
   static normalizeString(str) {

@@ -17,9 +17,18 @@ class SourcesProcessor {
     const { host } = pn.url;
     const { $ } = this;
 
-    const isDifferentHost = (pathname) => {
+    const isSameHost = (pathname) => {
       const url = new URL(pathname);
-      return host !== url.host;
+      return host === url.host;
+    };
+
+    const isSameDocument = (pathname) => pathname === pn.url.pathname;
+
+    const getFilename = (pathname) => {
+      if (isSameDocument(pathname)) {
+        return `${pn.getSourceFileName(pathname)}.html`;
+      }
+      return pn.getSourceFileName(pathname);
     };
 
     const tags = ['img', 'script', 'link'];
@@ -27,16 +36,21 @@ class SourcesProcessor {
     const process = (tagName) => {
       const pathProperty = tagName === 'link' ? 'href' : 'src';
       const tagArr = this[`${tagName}s`];
+      const elementsToProcess = [];
 
-      $(tagName).each(function (i, el) {
-        const originalPath = pn.getSourceUrl(el.attribs[pathProperty]);
-        if (isDifferentHost(originalPath)) {
-          return;
+      $(tagName).each(function (_i, el) {
+        const originalPath = pn.getSourceUrl(el.attribs[pathProperty]).href;
+        if (isSameHost(originalPath)) {
+          elementsToProcess.push(el);
         }
-        const filename = pn.getSourceFileName(el.attribs[pathProperty]);
+      });
+    
+      elementsToProcess.forEach((el, i) => {
+        const originalPath = pn.getSourceUrl(el.attribs[pathProperty]).href;
+        const filename = getFilename(el.attribs[pathProperty]);
         const filepath = path.join(dir, filename);
-        tagArr[i] = ({ originalPath, filepath });
-        $(this).attr(pathProperty, filepath);
+        tagArr[i] = { originalPath, filepath };
+        $(el).attr(pathProperty, filepath);
       });
     };
 

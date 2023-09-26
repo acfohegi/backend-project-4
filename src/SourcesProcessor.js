@@ -44,7 +44,7 @@ class SourcesProcessor {
           elementsToProcess.push(el);
         }
       });
-    
+
       elementsToProcess.forEach((el, i) => {
         const originalPath = pn.getSourceUrl(el.attribs[pathProperty]).href;
         const filename = getFilename(el.attribs[pathProperty]);

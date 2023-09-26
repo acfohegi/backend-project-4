@@ -97,8 +97,8 @@ test('SourcesProcessor', async () => {
         filepath: 'ru-hexlet-io-courses_files/ru-hexlet-io-assets-application.css',
       },
       {
-        originalPath: "https://ru.hexlet.io/courses",
-        filepath: "ru-hexlet-io-courses_files/ru-hexlet-io-courses.html",
+        originalPath: 'https://ru.hexlet.io/courses',
+        filepath: 'ru-hexlet-io-courses_files/ru-hexlet-io-courses.html',
       },
     ],
     scripts: [{

@@ -1,5 +1,8 @@
 import { mkdir, writeFile } from 'node:fs/promises';
 import SourceGetter from './SourceGetter.js';
+import debug from 'debug';
+
+const fsLog = debug('FileSaver');
 
 class FileSaver {
   constructor(sources, pathsNamer) {
@@ -9,6 +12,7 @@ class FileSaver {
   }
 
   saveHtml() {
+    fsLog('writing HTML to', this.htmlPath);
     return writeFile(this.htmlPath, this.sources.html);
   }
 

@@ -3,13 +3,12 @@ import path from 'node:path';
 export default class PathsNamer {
   constructor(urlString, options) {
     this.url = new URL(urlString);
-    this.protocol = this.url.protocol;
     this.output = options.output ?? '.';
   }
 
   getNormalizedUrl() {
     const protocolless = this.url.href
-      .replace(this.protocol, '')
+      .replace(this.url.protocol, '')
       .replace(/^\/\//, '');
     return PathsNamer.normalizeString(protocolless);
   }

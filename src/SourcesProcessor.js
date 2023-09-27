@@ -1,5 +1,8 @@
 import * as cheerio from 'cheerio';
 import path from 'node:path';
+import debug from 'debug';
+
+const spLog = debug('SourcesProcessor');
 
 class SourcesProcessor {
   constructor(html, pathsNamer) {
@@ -46,6 +49,7 @@ class SourcesProcessor {
       });
 
       elementsToProcess.forEach((el, i) => {
+        spLog('processing element', el);
         const originalPath = pn.getSourceUrl(el.attribs[pathProperty]).href;
         const filename = getFilename(el.attribs[pathProperty]);
         const filepath = path.join(dir, filename);

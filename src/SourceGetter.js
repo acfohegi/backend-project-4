@@ -20,27 +20,25 @@ export default class SourceGetter {
     sgLog('Getting source from', url);
 
     return axios({
-        url,
-        method: 'get',
-        responseType: 'stream',
-      }).then((response) => {
-        return new Promise((resolve, reject) => {
-          const stream = createWriteStream(filepath);
-          stream.on('finish', () => {
-            sgLog('Write stream to', filepath, 'finished')
-            resolve();
-          });
-          
-          stream.on('error', (e) => {
-            sgLog('Write stream to', filepath, 'failed\n', e);
-            reject(e);
-          });
-          
-          response.data.pipe(stream);
-        });
-      }).catch((e) => {
-        sgLog(e);
-        throw new Error(`Failed to get ${url}\n${e}`);
+      url,
+      method: 'get',
+      responseType: 'stream',
+    }).then((response) => new Promise((resolve, reject) => {
+      const stream = createWriteStream(filepath);
+      stream.on('finish', () => {
+        sgLog('Write stream to', filepath, 'finished');
+        resolve();
       });
+
+      stream.on('error', (e) => {
+        sgLog('Write stream to', filepath, 'failed\n', e);
+        reject(e);
+      });
+
+      response.data.pipe(stream);
+    })).catch((e) => {
+      sgLog(e);
+      throw new Error(`Failed to get ${url}\n${e}`);
+    });
   }
 }

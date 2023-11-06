@@ -1,8 +1,8 @@
+import debug from 'debug';
 import PathsNamer from './PathsNamer.js';
 import SourceGetter from './SourceGetter.js';
 import SourcesProcessor from './SourcesProcessor.js';
 import FileSaver from './FileSaver.js';
-import debug from 'debug';
 
 const plLog = debug('PageLoader');
 
@@ -23,7 +23,8 @@ class PageLoader {
         const fs = new FileSaver(sources, pn);
         fs.save().then((htmlPath) => {
           plLog(htmlPath);
-          return htmlPath});
+          return htmlPath;
+        });
       })
       .catch((e) => {
         plLog(e);

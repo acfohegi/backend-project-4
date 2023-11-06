@@ -192,7 +192,8 @@ test('network errors', async () => {
     nock(origin).get(`/status/${statusCode}`).reply(statusCode);
   };
 
-  const statusCodes = [100, 101, 102, 103, 201, 202, 203, 300, 301, 302, 303, 400, 401, 402, 403, 500, 501, 502, 503];
+  const statusCodes = [100, 101, 102, 103, 201, 202, 203, 300, 301, 302, 303, 400, 401, 402, 403,
+    500, 501, 502, 503];
   statusCodes.forEach((s) => mock(s));
 
   // const runTest = async (statusCode) => {
@@ -211,14 +212,14 @@ test('network errors', async () => {
 
   // expect.assertions(statusCodes.length);
 
-  // TODO: fix test running in forEach. 
+  // TODO: fix test running in forEach.
   // the code below is the same besides it has no wrapper.
 
   const url = `${origin}/status/201`;
   const pageLoader = new PageLoader(url, os.tmpdir());
 
   try {
-    await pageLoader.load()
+    await pageLoader.load();
   } catch (e) {
     expect(e.message).toMatch('Request failed with status code 201');
   }
@@ -232,21 +233,21 @@ test('network errors for sources', async () => {
   mockFs();
   const origin = 'https://httpbin.org';
   const statusCodes = [200, 201, 404];
-  
+
   const mock = (statusCode) => {
-    nock(origin).get(`/status/${statusCode}`).reply(statusCode, '')
+    nock(origin).get(`/status/${statusCode}`).reply(statusCode, '');
   };
-  
+
   nock(origin).get('/').reply(200, document);
   statusCodes.forEach((s) => mock(s));
   const pageLoader = new PageLoader(origin, process.cwd());
-  
+
   try {
     await pageLoader.load();
   } catch (e) {
     expect(e.message).toMatch('Request failed with status code 201');
   }
-  
+
   // TODO: fix test. the error is thrown. but assertion does not catch it.
   // expect.assertions(1);
 });
@@ -280,8 +281,8 @@ test('file system errors', async () => {
 
   const pn1 = new PathsNamer(url, { output: '/imaginary_dir' });
   const pn2 = new PathsNamer(url, { output: '/file' });
-  const pn3  = new PathsNamer(url, { output: '/read_only_dir' });
-  
+  const pn3 = new PathsNamer(url, { output: '/read_only_dir' });
+
   const prepareSources = (pn) => {
     const srcDir = pn.getSourcesDirName();
     const imgSrc = '/assets/professions/nodejs.png';
@@ -290,7 +291,7 @@ test('file system errors', async () => {
     const linkFilename = pn.getSourceFileName(linkSrc);
     const scriptSrc = '/packs/js/runtime.js';
     const scriptFilename = pn.getSourceFileName(scriptSrc);
-  
+
     return {
       html,
       imgs: [{
@@ -309,7 +310,7 @@ test('file system errors', async () => {
   };
 
   const testData = [
-    { 
+    {
       fs: new FileSaver(prepareSources(pn1), pn1),
       error: 'no such file or directory',
     },
@@ -322,7 +323,7 @@ test('file system errors', async () => {
       error: 'permission denied',
     },
   ];
-  
+
   // const runTest = async ({ fs, error }) => {
   //   try {
   //     await fs.save();

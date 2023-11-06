@@ -1,6 +1,6 @@
 import { mkdir, writeFile } from 'node:fs/promises';
-import SourceGetter from './SourceGetter.js';
 import debug from 'debug';
+import SourceGetter from './SourceGetter.js';
 
 const fsLog = debug('FileSaver');
 
@@ -14,7 +14,7 @@ class FileSaver {
   mkSourcesDir() {
     const sourcesDirName = this.pathsNamer.getSourcesDirName();
     const sourcesDirPath = this.pathsNamer.getSourcesDirPath(sourcesDirName);
-    fsLog(`Creating sources directory: ${sourcesDirPath}`)
+    fsLog(`Creating sources directory: ${sourcesDirPath}`);
     return mkdir(sourcesDirPath);
   }
 

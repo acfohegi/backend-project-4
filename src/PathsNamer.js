@@ -24,6 +24,10 @@ export default class PathsNamer {
     return `${normalizedUrl}_files`;
   }
 
+  getSourcesDirPath(dirname) {
+    return path.join(this.output, dirname);
+  }
+
   getSourceFileName(filepath) {
     const url = new URL(filepath, this.url.origin);
     const { dir, name, ext } = path.parse(url.pathname);

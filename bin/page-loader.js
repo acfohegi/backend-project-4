@@ -15,7 +15,13 @@ program
   .argument('<url>')
   .action((url, options) => {
     const pageLoader = new PageLoader(url, options);
-    pageLoader.load().then((path) => console.log(path));
+    pageLoader.load()
+      .then((path) => {
+        console.log(path);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   });
 
 program.parse();

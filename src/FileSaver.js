@@ -7,12 +7,19 @@ const fsLog = debug('FileSaver');
 class FileSaver {
   constructor(sources, pathsNamer) {
     this.sources = sources;
+    this.pathsNamer = pathsNamer;
     this.htmlPath = pathsNamer.getHtmlFilePath();
-    this.sourcesDir = pathsNamer.getSourcesDirName();
+  }
+
+  mkSourcesDir() {
+    const sourcesDirName = this.pathsNamer.getSourcesDirName();
+    const sourcesDirPath = this.pathsNamer.getSourcesDirPath(sourcesDirName);
+    fsLog(`Creating sources directory: ${sourcesDirPath}`)
+    return mkdir(sourcesDirPath);
   }
 
   saveHtml() {
-    fsLog('writing HTML to', this.htmlPath);
+    fsLog('Writing HTML to', this.htmlPath);
     return writeFile(this.htmlPath, this.sources.html);
   }
 
@@ -27,20 +34,30 @@ class FileSaver {
       return Promise.resolve();
     }
 
-    mkdir(this.sourcesDir);
+    fsLog(`Starting load page sources:\n${JSON.stringify(srcs)}`);
 
     const srcPromises = srcs.map(({ originalPath, filepath }) => {
       const promise = SourceGetter.getSource(originalPath, filepath);
       return promise;
     });
 
-    return Promise.all(srcPromises);
+    return this.mkSourcesDir()
+      .then(() => {
+        Promise.all(srcPromises);
+      });
   }
 
   save() {
     return this.saveSources()
       .then(() => this.saveHtml())
-      .then(() => this.htmlPath);
+      .then(() => {
+        fsLog('HTML page and its sources are saved.');
+        return Promise.resolve(this.htmlPath);
+      })
+      .catch((e) => {
+        fsLog(e);
+        throw new Error(`Failed to save sources. ${e}`);
+      });
   }
 }
 

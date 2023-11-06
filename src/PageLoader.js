@@ -21,7 +21,13 @@ class PageLoader {
       })
       .then((sources) => {
         const fs = new FileSaver(sources, pn);
-        fs.save().then((htmlPath) => htmlPath);
+        fs.save().then((htmlPath) => {
+          plLog(htmlPath);
+          return htmlPath});
+      })
+      .catch((e) => {
+        plLog(e);
+        throw new Error(e);
       });
   }
 }

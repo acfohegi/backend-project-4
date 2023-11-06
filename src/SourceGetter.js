@@ -3,37 +3,44 @@ import { createWriteStream } from 'node:fs';
 import debug from 'debug';
 
 const sgLog = debug('SourceGetter');
+axios.defaults.validateStatus = (status) => status === 200;
 
 export default class SourceGetter {
   static getHtml(url) {
-    sgLog('getting HTML for', url.href);
-    return axios.get(url).then((response) => response.data);
+    sgLog('Getting HTML for', url.href);
+    return axios.get(url)
+      .then((response) => response.data)
+      .catch((e) => {
+        sgLog(e);
+        throw new Error(`Failed to get ${url}\n${e}`);
+      });
   }
 
   static getSource(url, filepath) {
-    sgLog('getting source from', url)
-    return new Promise((resolve, reject) => {
-      axios({
+    sgLog('Getting source from', url);
+
+    return axios({
         url,
         method: 'get',
         responseType: 'stream',
       }).then((response) => {
-        const stream = createWriteStream(filepath);
-
-        stream.on('close', () => {
-          sgLog('write stream to', filepath, 'closed')
-          resolve();
+        return new Promise((resolve, reject) => {
+          const stream = createWriteStream(filepath);
+          stream.on('finish', () => {
+            sgLog('Write stream to', filepath, 'finished')
+            resolve();
+          });
+          
+          stream.on('error', (e) => {
+            sgLog('Write stream to', filepath, 'failed\n', e);
+            reject(e);
+          });
+          
+          response.data.pipe(stream);
         });
-
-        stream.on('error', (error) => {
-          sgLog('write stream to', filepath, 'failed')
-          reject(error);
-        });
-
-        response.data.pipe(stream);
-      }).catch((error) => {
-        reject(error);
+      }).catch((e) => {
+        sgLog(e);
+        throw new Error(`Failed to get ${url}\n${e}`);
       });
-    });
   }
 }

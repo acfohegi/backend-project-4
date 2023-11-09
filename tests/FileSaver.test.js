@@ -5,6 +5,10 @@ import { mockFsBesidesNodeModules, getFixturePath } from './helpers.js';
 import PathsNamer from '../src/PathsNamer.js';
 import FileSaver from '../src/FileSaver.js';
 
+afterEach(() => {
+  mockFs.restore();
+});
+
 const html = await readFile(getFixturePath('ru-hexlet-io-courses.html'));
 const image = await readFile(getFixturePath('nodejs.png'));
 const css = await readFile(getFixturePath('application.css'));

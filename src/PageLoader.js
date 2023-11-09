@@ -21,10 +21,11 @@ class PageLoader {
       })
       .then((sources) => {
         const fs = new FileSaver(sources, pn);
-        fs.save().then((htmlPath) => {
-          plLog(htmlPath);
-          return htmlPath;
-        });
+        return fs.save()
+          .then((htmlPath) => {
+            plLog('Files are saved. htmlPath:', htmlPath);
+            return htmlPath;
+          });
       })
       .catch((e) => {
         plLog(e);

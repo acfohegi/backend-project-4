@@ -16,8 +16,8 @@ program
   .action((url, options) => {
     const pageLoader = new PageLoader(url, options);
     pageLoader.load()
-      .then((path) => {
-        console.log(path);
+      .then((htmlPath) => {
+        console.log(htmlPath);
       })
       .catch((error) => {
         console.error(error);

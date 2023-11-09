@@ -41,7 +41,7 @@ class SourcesProcessor {
       const tagArr = this[`${tagName}s`];
       const elementsToProcess = [];
 
-      $(tagName).each(function (_i, el) {
+      $(tagName).each((_i, el) => {
         const originalPath = pn.getSourceUrl(el.attribs[pathProperty]).href;
         if (isSameHost(originalPath)) {
           elementsToProcess.push(el);

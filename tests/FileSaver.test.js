@@ -1,3 +1,4 @@
+import mockFs from 'mock-fs';
 import nock from 'nock';
 import path from 'node:path';
 import { readFile } from 'node:fs/promises';

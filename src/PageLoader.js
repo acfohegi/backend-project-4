@@ -4,7 +4,7 @@ import SourceGetter from './SourceGetter.js';
 import SourcesProcessor from './SourcesProcessor.js';
 import FileSaver from './FileSaver.js';
 
-const plLog = debug('PageLoader');
+const plLog = debug('page-loader');
 
 class PageLoader {
   constructor(url, options) {

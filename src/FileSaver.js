@@ -4,7 +4,7 @@ import Listr from 'listr';
 import path from 'node:path';
 import SourceGetter from './SourceGetter.js';
 
-const fsLog = debug('FileSaver');
+const fsLog = debug('page-loader');
 
 class FileSaver {
   constructor(sources, pathsNamer) {

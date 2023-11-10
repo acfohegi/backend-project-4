@@ -1,4 +1,4 @@
-import PageLoader from "./src/PageLoader.js";
+import PageLoader from './src/PageLoader.js';
 
 const load = (url, output) => {
   const pl = new PageLoader(url, { output });

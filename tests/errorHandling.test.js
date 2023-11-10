@@ -64,7 +64,7 @@ const document = await readFile(getFixturePath('httpbin-org-errors.html'));
 test('network errors for sources', async () => {
   mockFsBesidesNodeModules();
   const origin = 'https://httpbin.org';
-  const statusCodes = [200, 201, 404];
+  const statusCodes = [201, 300, 404];
 
   const mock = (statusCode) => {
     nock(origin).get(`/status/${statusCode}`).reply(statusCode, '');
@@ -77,11 +77,10 @@ test('network errors for sources', async () => {
   try {
     await pageLoader.load();
   } catch (e) {
-    expect(e.message).toMatch('Request failed with status code 201');
+    expect(e.message).toMatch('Request failed');
   }
 
-  // TODO: fix test. the error is thrown. but assertion does not catch it.
-  // expect.assertions(1);
+  expect.assertions(1);
 });
 
 test('file system errors', async () => {

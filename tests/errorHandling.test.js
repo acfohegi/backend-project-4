@@ -17,7 +17,7 @@ const image = await readFile(getFixturePath('nodejs.png'));
 const css = await readFile(getFixturePath('application.css'));
 const script = await readFile(getFixturePath('runtime.js'));
 
-test.skip('network errors', async () => {
+test('network errors', async () => {
   mockFsBesidesNodeModules();
   const origin = 'https://httpbin.org';
   const mock = (statusCode) => {
@@ -61,7 +61,7 @@ test.skip('network errors', async () => {
 
 const document = await readFile(getFixturePath('httpbin-org-errors.html'));
 
-test.skip('network errors for sources', async () => {
+test('network errors for sources', async () => {
   mockFsBesidesNodeModules();
   const origin = 'https://httpbin.org';
   const statusCodes = [201, 300, 404];
@@ -83,7 +83,7 @@ test.skip('network errors for sources', async () => {
   expect.assertions(1);
 });
 
-test.skip('file system errors', async () => {
+test('file system errors', async () => {
   const mockSources = (pathname, filename, src) => {
     nock('https://ru.hexlet.io')
       .get(pathname)

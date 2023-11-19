@@ -1,1 +1,1 @@
-export default class PageLoaderError extends Error {};
+export default class PageLoaderError extends Error {}

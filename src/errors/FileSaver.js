@@ -1,1 +1,1 @@
-export default class FileSaverError extends Error {};
+export default class FileSaverError extends Error {}

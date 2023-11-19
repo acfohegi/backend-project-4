@@ -42,7 +42,7 @@ class FileSaver {
     const sourcesTasks = fs.pageSources.map((s) => {
       const filename = path.basename(s.originalPath);
       const title = `Loading ${filename}`;
-      const task = () => SourceGetter.getSource(s.originalPath, s.filepath);
+      const task = () => SourceGetter.getSource(s.originalPath, s.fullpath);
       return { title, task };
     });
 

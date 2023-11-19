@@ -1,1 +1,1 @@
-export default class SourceGetterError extends Error {};
+export default class SourceGetterError extends Error {}

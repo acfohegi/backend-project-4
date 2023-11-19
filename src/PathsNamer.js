@@ -36,6 +36,10 @@ export default class PathsNamer {
     return `${basename}${ext}`;
   }
 
+  getSourceFullPath(filename, dir) {
+    return path.join(this.output, dir, filename);
+  }
+
   getSourceUrl(filepath) {
     return new URL(filepath, this.url.origin);
   }

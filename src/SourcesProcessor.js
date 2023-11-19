@@ -53,7 +53,8 @@ class SourcesProcessor {
         const originalPath = pn.getSourceUrl(el.attribs[pathProperty]).href;
         const filename = getFilename(el.attribs[pathProperty]);
         const filepath = path.join(dir, filename);
-        tagArr[i] = { originalPath, filepath };
+        const fullpath = pn.getSourceFullPath(filename, dir);
+        tagArr[i] = { originalPath, fullpath };
         $(el).attr(pathProperty, filepath);
       });
     };

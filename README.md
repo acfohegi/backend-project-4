@@ -22,7 +22,7 @@ Options:
 
 page-loader is a study project from the [Hexlet course](https://ru.hexlet.io/programs/backend/projects/4). 
 
-The utility saves a web-page and its sources to a specified path. Paths for sources are replaced for local files in a final HTML. A source is saved if it comes from the same origin. Only sources from tags <img> <link> <script> are processed.
+The utility saves a web-page and its sources to a specified path. Paths for sources are replaced for local files in a final HTML. A source is saved if it comes from the same origin. Only sources from tags 'img', 'link', 'script' are processed.
 
 All the asynchronous code is based on explicit promises. That was the task's requirement. `async/await` were allowed to use in tests only. The set of supported tags, naming rules and other implementation aspects are also based on requirements. Tests have mocks for filesystem and network.
 

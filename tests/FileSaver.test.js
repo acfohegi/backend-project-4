@@ -45,15 +45,15 @@ test('FileSaver', async () => {
     html,
     imgs: [{
       originalPath: pn.getSourceUrl(imgSrc).href,
-      filepath: path.join(srcDir, imgFilename),
+      fullpath: path.join(srcDir, imgFilename),
     }],
     links: [{
       originalPath: pn.getSourceUrl(linkSrc).href,
-      filepath: path.join(srcDir, linkFilename),
+      fullpath: path.join(srcDir, linkFilename),
     }],
     scripts: [{
       originalPath: 'https://ru.hexlet.io/packs/js/runtime.js',
-      filepath: path.join(srcDir, scriptFilename),
+      fullpath: path.join(srcDir, scriptFilename),
     }],
   };
 
@@ -61,9 +61,9 @@ test('FileSaver', async () => {
 
   const actualHtmlPath = await fs.save();
   const actualHtml = await readFile(actualHtmlPath);
-  const actualImage = await readFile(sources.imgs[0].filepath);
-  const actualCss = await readFile(sources.links[0].filepath);
-  const actualScript = await readFile(sources.scripts[0].filepath);
+  const actualImage = await readFile(sources.imgs[0].fullpath);
+  const actualCss = await readFile(sources.links[0].fullpath);
+  const actualScript = await readFile(sources.scripts[0].fullpath);
 
   expect(actualHtml).toStrictEqual(html);
   expect(actualImage).toStrictEqual(image);

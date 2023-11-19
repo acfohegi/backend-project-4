@@ -17,10 +17,10 @@ program
     const pageLoader = new PageLoader(url, options);
     pageLoader.load()
       .then((htmlPath) => {
-        console.log(htmlPath);
+        console.log('\nPage was succesfully downloaded into', htmlPath);
       })
-      .catch((error) => {
-        console.error(error);
+      .catch((e) => {
+        console.error(e.message);
       });
   });
 

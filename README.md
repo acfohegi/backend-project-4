@@ -1,9 +1,7 @@
-### Hexlet-check, tests and linter status:
 [![Actions Status](https://github.com/acfohegi/backend-project-4/workflows/hexlet-check/badge.svg)](https://github.com/acfohegi/backend-project-4/actions)
 [![test](https://github.com/acfohegi/backend-project-4/actions/workflows/test.yml/badge.svg)](https://github.com/acfohegi/backend-project-4/actions/workflows/test.yml)
 [![lint](https://github.com/acfohegi/backend-project-4/actions/workflows/lint.yml/badge.svg)](https://github.com/acfohegi/backend-project-4/actions/workflows/lint.yml)
 
-### Code Climate checks status:
 [![Maintainability](https://api.codeclimate.com/v1/badges/81e15e6871e6059e6f5f/maintainability)](https://codeclimate.com/github/acfohegi/backend-project-4/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/81e15e6871e6059e6f5f/test_coverage)](https://codeclimate.com/github/acfohegi/backend-project-4/test_coverage)
 
@@ -22,7 +20,7 @@ Options:
 
 # Description
 
-page-loader is a study project from the ![[Hexlet course](https://ru.hexlet.io/programs/backend/projects/4). 
+page-loader is a study project from the [Hexlet course](https://ru.hexlet.io/programs/backend/projects/4). 
 
 The utility saves a web-page and its sources to a specified path. Paths for sources are replaced for local files in a final HTML. A source is saved if it comes from the same origin. Only sources from tags <img> <link> <script> are processed.
 
@@ -36,9 +34,9 @@ All the asynchronous code is based on explicit promises. That was the task's req
 
 ### Logging
 
-asciicast
+[![asciicast](https://asciinema.org/a/621904.svg)](https://asciinema.org/a/621904)
 
 ### Error handling
 
-asciicast
+[![asciicast](https://asciinema.org/a/621900.svg)](https://asciinema.org/a/621900)
 

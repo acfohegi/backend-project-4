@@ -3,6 +3,7 @@ import debug from 'debug';
 import Listr from 'listr';
 import path from 'node:path';
 import SourceGetter from './SourceGetter.js';
+import FileSaverError from './errors/FileSaver.js';
 
 const fsLog = debug('page-loader');
 
@@ -61,7 +62,7 @@ class FileSaver {
       })
       .catch((e) => {
         fsLog(e);
-        throw new Error(`Failed to save sources.\n${e}`);
+        throw new FileSaverError(`Failed to save sources.\n${e.message}`);
       });
   }
 }

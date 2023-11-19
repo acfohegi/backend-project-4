@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { createWriteStream } from 'node:fs';
 import debug from 'debug';
+import SourceGetterError from './errors/SourceGetter.js';
 
 const sgLog = debug('page-loader');
 axios.defaults.validateStatus = (status) => status === 200;
@@ -12,7 +13,7 @@ export default class SourceGetter {
       .then((response) => response.data)
       .catch((e) => {
         sgLog(e);
-        throw new Error(`Failed to get ${url}\n${e}`);
+        throw new SourceGetterError(`Failed to get ${url}\n${e.message}`);
       });
   }
 
@@ -38,7 +39,7 @@ export default class SourceGetter {
       response.data.pipe(stream);
     })).catch((e) => {
       sgLog(e);
-      throw new Error(`Failed to get ${url}\n${e}`);
+      throw new SourceGetterError(`Failed to get ${url}\n${e.message}`);
     });
   }
 }

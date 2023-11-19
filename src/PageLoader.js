@@ -3,6 +3,7 @@ import PathsNamer from './PathsNamer.js';
 import SourceGetter from './SourceGetter.js';
 import SourcesProcessor from './SourcesProcessor.js';
 import FileSaver from './FileSaver.js';
+import PageLoaderError from './errors/PageLoader.js';
 
 const plLog = debug('page-loader');
 
@@ -29,7 +30,7 @@ class PageLoader {
       })
       .catch((e) => {
         plLog(e);
-        throw new Error(e);
+        throw new PageLoaderError(e.message);
       });
   }
 }

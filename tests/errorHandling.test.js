@@ -1,4 +1,6 @@
-/* eslint jest/no-conditional-expect: 0 */
+/* eslint jest/no-conditional-expect: 0 jest/no-try-expect: 0
+    --------
+    These rules can be disabled due to the counting of assertions in each test. */
 import nock from 'nock';
 import mockFs from 'mock-fs';
 import path from 'node:path';

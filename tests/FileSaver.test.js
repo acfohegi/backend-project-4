@@ -5,15 +5,11 @@ import { readFile } from 'node:fs/promises';
 import { mockFsBesidesNodeModules, getFixturePath } from './helpers.js';
 import PathsNamer from '../src/PathsNamer.js';
 import FileSaver from '../src/FileSaver.js';
+import { html, image, css, script } from './fixtures.js';
 
 afterEach(() => {
   mockFs.restore();
 });
-
-const html = await readFile(getFixturePath('ru-hexlet-io-courses.html'));
-const image = await readFile(getFixturePath('nodejs.png'));
-const css = await readFile(getFixturePath('application.css'));
-const script = await readFile(getFixturePath('runtime.js'));
 
 test('FileSaver', async () => {
   const mockSources = (pathname, filename, src) => {

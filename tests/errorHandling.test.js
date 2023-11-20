@@ -1,3 +1,4 @@
+/* eslint jest/no-conditional-expect: 0 */
 import nock from 'nock';
 import mockFs from 'mock-fs';
 import path from 'node:path';

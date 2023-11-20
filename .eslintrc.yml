@@ -22,4 +22,4 @@ rules:
   no-underscore-dangle:
     - error
     - { allow: ['__filename', '__dirname'] }
-  jest/no-conditional-expect: off
+    

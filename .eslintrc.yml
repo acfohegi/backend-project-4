@@ -1,8 +1,6 @@
 plugins:
-  # https://github.com/jest-community/eslint-plugin-jest
   - jest
 
-# https://eslint.org/docs/user-guide/configuring#specifying-environments
 env:
   node: true
 
@@ -22,3 +20,8 @@ rules:
   no-underscore-dangle:
     - error
     - { allow: ['__filename', '__dirname'] }
+
+ignorePatterns:
+  # The file is ignored because of conflicting version of jest plugin in Hexlet's linter.
+  # https://github.com/jest-community/eslint-plugin-jest/blob/fb07a91b3e68546a90594023450fe85fe9fe22b5/CHANGELOG.md?plain=1#L1101
+  - 'tests/errorHandling.test.js'

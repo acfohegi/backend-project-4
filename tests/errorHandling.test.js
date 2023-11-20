@@ -2,12 +2,16 @@ import nock from 'nock';
 import mockFs from 'mock-fs';
 import path from 'node:path';
 import os from 'node:os';
-import { readFile } from 'node:fs/promises';
-import { getFixturePath, mockFsBesidesNodeModules } from './helpers.js';
+import { mockFsBesidesNodeModules, readFixtures } from './helpers.js';
 import PathsNamer from '../src/PathsNamer.js';
 import FileSaver from '../src/FileSaver.js';
 import PageLoader from '../src/PageLoader.js';
-import { html, image, css, script } from './fixtures.js';
+
+let fixtures;
+
+beforeAll(async () => {
+  fixtures = await readFixtures();
+});
 
 afterEach(() => {
   mockFs.restore();
@@ -55,9 +59,8 @@ test('network errors', async () => {
   expect.assertions(1);
 });
 
-const document = await readFile(getFixturePath('httpbin-org-errors.html'));
-
 test('network errors for sources', async () => {
+  const { errorsHtml } = fixtures;
   mockFsBesidesNodeModules();
   const origin = 'https://httpbin.org';
   const statusCodes = [201, 300, 404];
@@ -66,7 +69,7 @@ test('network errors for sources', async () => {
     nock(origin).get(`/status/${statusCode}`).reply(statusCode, '');
   };
 
-  nock(origin).get('/').reply(200, document);
+  nock(origin).get('/').reply(200, errorsHtml);
   statusCodes.forEach((s) => mock(s));
   const pageLoader = new PageLoader(origin, process.cwd());
 
@@ -80,6 +83,10 @@ test('network errors for sources', async () => {
 });
 
 test('file system errors', async () => {
+  const {
+    html, image, css, script,
+  } = fixtures;
+
   const mockSources = (pathname, filename, src) => {
     nock('https://ru.hexlet.io')
       .get(pathname)

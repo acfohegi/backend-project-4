@@ -2,16 +2,25 @@ import mockFs from 'mock-fs';
 import nock from 'nock';
 import path from 'node:path';
 import { readFile } from 'node:fs/promises';
-import { mockFsBesidesNodeModules, getFixturePath } from './helpers.js';
+import { mockFsBesidesNodeModules, readFixtures } from './helpers.js';
 import PathsNamer from '../src/PathsNamer.js';
 import FileSaver from '../src/FileSaver.js';
-import { html, image, css, script } from './fixtures.js';
+
+let fixtures;
+
+beforeAll(async () => {
+  fixtures = await readFixtures();
+});
 
 afterEach(() => {
   mockFs.restore();
 });
 
 test('FileSaver', async () => {
+  const {
+    html, image, css, script,
+  } = fixtures;
+
   const mockSources = (pathname, filename, src) => {
     nock('https://ru.hexlet.io').get(pathname).reply(200, src, {
       'content-type': 'application/octet-stream',

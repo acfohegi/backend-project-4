@@ -12,6 +12,13 @@ import PageLoader from '../src/PageLoader.js';
 
 let fixtures;
 
+const mockStatusCodes = (origin, codes) => {
+  const mock = (statusCode) => {
+    nock(origin).get(`/status/${statusCode}`).reply(statusCode);
+  };
+  codes.forEach((s) => mock(s));
+};
+
 beforeAll(async () => {
   fixtures = await readFixtures();
 });
@@ -21,15 +28,11 @@ afterEach(() => {
 });
 
 test('network errors', async () => {
-  mockFsBesidesNodeModules();
   const origin = 'https://httpbin.org';
-  const mock = (statusCode) => {
-    nock(origin).get(`/status/${statusCode}`).reply(statusCode);
-  };
-
   const statusCodes = [100, 101, 102, 103, 201, 202, 203, 300, 301, 302, 303, 400, 401, 402, 403,
     500, 501, 502, 503];
-  statusCodes.forEach((s) => mock(s));
+  mockStatusCodes(origin, statusCodes);
+  mockFsBesidesNodeModules();
 
   const testFunc = async (statusCode) => {
     const url = `${origin}/status/${statusCode}`;
@@ -50,13 +53,8 @@ test('network errors for sources', async () => {
   const origin = 'https://httpbin.org';
   const pageLoader = new PageLoader(origin, process.cwd());
   const statusCodes = [201, 300, 404];
-  
-  const mock = (statusCode) => {
-    nock(origin).get(`/status/${statusCode}`).reply(statusCode, '');
-  };
-  
   nock(origin).get('/').reply(200, errorsHtml);
-  statusCodes.forEach((s) => mock(s));
+  mockStatusCodes(origin, statusCodes);
   mockFsBesidesNodeModules();
 
   try {

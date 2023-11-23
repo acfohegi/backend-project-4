@@ -3,7 +3,7 @@ import { createWriteStream } from 'node:fs';
 import debug from 'debug';
 import SourceGetterError from './errors/SourceGetter.js';
 
-const sgLog = debug('page-loader');
+const sgLog = debug('SourceGetter');
 axios.defaults.validateStatus = (status) => status === 200;
 
 export default class SourceGetter {

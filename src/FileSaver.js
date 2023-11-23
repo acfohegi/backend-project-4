@@ -5,7 +5,7 @@ import path from 'node:path';
 import SourceGetter from './SourceGetter.js';
 import FileSaverError from './errors/FileSaver.js';
 
-const fsLog = debug('page-loader');
+const fsLog = debug('FileSaver');
 
 class FileSaver {
   constructor(sources, pathsNamer) {

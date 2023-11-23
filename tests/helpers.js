@@ -23,4 +23,11 @@ const readFixtures = async () => {
   };
 };
 
-export { mockFsBesidesNodeModules, getFixturePath, readFixtures };
+const asyncAssert = async (testData, testFunc) => {
+  const promises = testData.map((d) => testFunc(d));
+  return Promise.all(promises);
+};
+
+export {
+  mockFsBesidesNodeModules, getFixturePath, readFixtures, asyncAssert,
+};

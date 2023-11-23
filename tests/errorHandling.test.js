@@ -5,7 +5,7 @@ import nock from 'nock';
 import mockFs from 'mock-fs';
 import path from 'node:path';
 import os from 'node:os';
-import { mockFsBesidesNodeModules, readFixtures } from './helpers.js';
+import { asyncAssert, mockFsBesidesNodeModules, readFixtures } from './helpers.js';
 import PathsNamer from '../src/PathsNamer.js';
 import FileSaver from '../src/FileSaver.js';
 import PageLoader from '../src/PageLoader.js';
@@ -31,50 +31,33 @@ test('network errors', async () => {
     500, 501, 502, 503];
   statusCodes.forEach((s) => mock(s));
 
-  // const runTest = async (statusCode) => {
-  //   const url = `${origin}/status/${statusCode}`;
-  //   const pageLoader = new PageLoader(url, os.tmpdir());
-  //   try {
-  //     await pageLoader.load();
-  //   } catch (e) {
-  //     expect(e.message).toMatch(`Request failed with status code ${statusCode}`);
-  //   }
-  // };
+  const testFunc = async (statusCode) => {
+    const url = `${origin}/status/${statusCode}`;
+    const pageLoader = new PageLoader(url, os.tmpdir());
+    try {
+      await pageLoader.load();
+    } catch (e) {
+      expect(e.message).toMatch(`Request failed with status code ${statusCode}`);
+    }
+  };
 
-  // statusCodes.forEach(async (s) => {
-  //  await runTest(s);
-  // });
-
-  // expect.assertions(statusCodes.length);
-
-  // TODO: fix test running in forEach.
-  // the code below is the same besides it has no wrapper.
-
-  const url = `${origin}/status/201`;
-  const pageLoader = new PageLoader(url, os.tmpdir());
-
-  try {
-    await pageLoader.load();
-  } catch (e) {
-    expect(e.message).toMatch('Request failed with status code 201');
-  }
-
-  expect.assertions(1);
+  await asyncAssert(statusCodes, testFunc);
+  expect.assertions(statusCodes.length);
 });
 
 test('network errors for sources', async () => {
   const { errorsHtml } = fixtures;
-  mockFsBesidesNodeModules();
   const origin = 'https://httpbin.org';
+  const pageLoader = new PageLoader(origin, process.cwd());
   const statusCodes = [201, 300, 404];
-
+  
   const mock = (statusCode) => {
     nock(origin).get(`/status/${statusCode}`).reply(statusCode, '');
   };
-
+  
   nock(origin).get('/').reply(200, errorsHtml);
   statusCodes.forEach((s) => mock(s));
-  const pageLoader = new PageLoader(origin, process.cwd());
+  mockFsBesidesNodeModules();
 
   try {
     await pageLoader.load();
@@ -162,36 +145,14 @@ test('file system errors', async () => {
     },
   ];
 
-  // const runTest = async ({ fs, error }) => {
-  //   try {
-  //     await fs.save();
-  //   } catch (e) {
-  //     expect(e.message).toMatch(error);
-  //   }
-  // };
+  const testFunc = async ({ fs, error }) => {
+    try {
+      await fs.save();
+    } catch (e) {
+      expect(e.message).toMatch(error);
+    }
+  };
 
-  // testData.forEach((data) => runTest(data));
-  // expect.assertions(3);
-  // TODO: fix running test in forEach.
-  // the code below is the same besides it has no wrapper.
-
-  try {
-    await testData[0].fs.save();
-  } catch (e) {
-    expect(e.message).toMatch(testData[0].error);
-  }
-
-  try {
-    await testData[1].fs.save();
-  } catch (e) {
-    expect(e.message).toMatch(testData[1].error);
-  }
-
-  try {
-    await testData[2].fs.save();
-  } catch (e) {
-    expect(e.message).toMatch(testData[2].error);
-  }
-
+  await asyncAssert(testData, testFunc);
   expect.assertions(3);
 });
